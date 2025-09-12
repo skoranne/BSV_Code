@@ -1,6 +1,7 @@
 // File      : CPU_IFC.bsv
 // Author    : Sandeep Koranne (C) 2025 All rights reserved
 // Purpose   : ALU MMIX and RISC Processor design
+//           : learning from Rishiyur Nikhil's book on Learn RISCv
 // -*- mode: haskell -*-
 //
 
@@ -94,95 +95,6 @@ function Decode_to_RR fn_Decode( Fetch_to_Decode x_F_to_D,
 			  
    return y;
 endfunction
-
-
-
-
-// ================================================================
-// Register Read => Retire Direct
-// Controls Retire's merge of results from execution pipelines
-
-typedef enum {EXEC_TAG_DIRECT,
-	      EXEC_TAG_CONTROL,
-	      EXEC_TAG_INT,
-	      EXEC_TAG_DMEM
-} Exec_Tag
-deriving (Bits, Eq, FShow);
-
-
-typedef struct {Exec_Tag     exec_tag;    // ``flow'' for this instr
-		Bit #(DATA_WIDTH)  pc;
-		Bool         has_rd;      // From RR
-		Bool         writes_mem;  // From RR
-
-		Bool         exception;   // Fetch exception, decode illegal instr
-		Bit #(4)     cause;
-		Bit #(DATA_WIDTH)  tval;
-
-		// If not exception
-		Bit #(32)    instr;
-		Bit #(DATA_WIDTH)  fallthru_pc;
-		Bit #(DATA_WIDTH)  rs1_val;     // For CSRRXX instrs
-} RR_to_Retire
-deriving (Bits, FShow);
-
-// ================================================================
-// Register Read => EX_Control => Retire
-
-// ---------------- Register Read => EX_Control (BR/JAL/JALR)
-
-typedef struct {Bit #(DATA_WIDTH)  pc;
-		Bit #(DATA_WIDTH)  fallthru_pc;
-		Bit #(32)    instr;
-		Bit #(DATA_WIDTH)  rs1_val;
-		Bit #(DATA_WIDTH)  rs2_val;
-		Bit #(DATA_WIDTH)  imm;
-} RR_to_EX_Control
-deriving (Bits, FShow);
-
-// ---------------- EX_Control => Retire
-
-typedef struct {Bool         exception;  // Misaligned BRANCH/JAL/JALR target
-		Bit #(4)     cause;
-		Bit #(DATA_WIDTH)  tval;
-
-		Bit #(DATA_WIDTH)  next_pc;
-		Bit #(DATA_WIDTH)  data;          // Return-PC for JAL/JALR
-
-		// for debugging only
-		Bit #(32)    instr;
-		Bit #(64)    inum;
-		Bit #(DATA_WIDTH)  pc;
-} EX_Control_to_Retire
-deriving (Bits, FShow);
-
-// ================================================================
-// Register Read => Execute pipes (Int, IMUL, FALU, DMem, ...) => Retire
-
-// ---------------- Register Read => EX
-
-typedef struct {Bit #(32)    instr;
-		Bit #(DATA_WIDTH)  rs1_val;
-		Bit #(DATA_WIDTH)  rs2_val;
-		Bit #(DATA_WIDTH)  imm;
-		Bit #(DATA_WIDTH)  pc;
-} RR_to_EX
-deriving (Bits, FShow);
-
-// ---------------- EX => Retire
-
-typedef struct {Bool         exception;
-		Bit #(4)     cause;
-		Bit #(DATA_WIDTH)  tval;
-
-		Bit #(DATA_WIDTH)  data;
-
-		// for debugging only
-		Bit #(64)    inum;
-		Bit #(DATA_WIDTH)  pc;
-		Bit #(32)    instr;
-} EX_to_Retire
-deriving (Bits, FShow);
 
 interface CPU_IFC;
   method Action boot;
