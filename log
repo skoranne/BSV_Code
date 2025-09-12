@@ -1,0 +1,328 @@
+Booting processor.......
+Done.
+
+Self testing processor.......
+Done.
+
+Fetch instruction:          0.
+
+Self testing processor.......
+Done.
+
+Decoding instruction.
+
+Executing...
+
+[ 2]                    8 = [ 1]                    2 [ 1]                    2 instr: SLL
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] = 12297829382473034410
+Fetch instruction:          4.
+
+Decoding instruction.
+
+Executing...
+
+[ 3]                   10 = [ 1]                    2 [ 2]                    8 instr: ADD
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:          8.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         12.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         16.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         20.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         24.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         28.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         32.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         36.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         40.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         44.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         48.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         52.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         56.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         60.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         64.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         68.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         72.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         76.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         80.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         84.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         88.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         92.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP
+
+---------***---------
+
+Reg[ 1] =                    2
+Reg[ 2] =                    8
+Reg[ 3] =                   10
+Fetch instruction:         96.
+
+Decoding instruction.
+
+Executing...
+
+[ 0]                    0 = [ 0]                    0 [ 0]                    0 instr: NOP

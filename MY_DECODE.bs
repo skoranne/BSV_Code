@@ -1,0 +1,42 @@
+-- File      : Decode.bs
+-- Author    : Sandeep Koranne (C) 2025 All rights reserved
+-- Purpose   : Bluespec BH mode example
+-- -*- mode: haskell -*-
+--
+package Decode where
+
+import RegFile
+import List
+
+data Maybe a = Nothing | Just a
+data Operand = Register (Bit 5) | Literal (Bit 22) deriving(Bits) -- RiscV
+
+interface Decode_IFC =
+  put :: Int 32 -> Action
+  get :: ActionValue (Int 32)
+  decode :: Operand -> Action
+  
+mkDecode :: Module Decode_IFC
+mkDecode =
+  module
+  -- Example
+  reg_input :: Reg (UInt 3) <- mkReg 0
+  reg_storage :: Reg (Int 32) <- mkReg 0
+  reg_op :: Reg (Operand) <- mkReg 0
+  interface
+    put x = do
+       reg_input := reg_input + 1
+       reg_storage := x
+    get = do
+       reg_input := reg_input - 1
+       return reg_storage
+    decode op = do
+       reg_input := reg_input + 1
+
+
+       
+
+
+
+
+
