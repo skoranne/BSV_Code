@@ -99,8 +99,6 @@ endfunction
 interface CPU_IFC;
   method Action boot;
   method ActionValue#(Bit#(DATA_WIDTH)) selftest(Bit#(DATA_WIDTH) instr);
-  //interface ALUIfc#(DATA_WIDTH) compute_val;
-  //method Action put(Bit#(16) memrd);
   interface FIFOF_O #(Mem_Req) fo_IMem_req;
   interface FIFOF_I #(Mem_Rsp) fi_IMem_rsp;
 endinterface

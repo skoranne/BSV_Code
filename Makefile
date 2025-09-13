@@ -1,6 +1,8 @@
 # File    : Makefile
 # Author  : Sandeep Koranne (C) 2025.
 # Purpose : Command lines for Verilog generation for BSV
+mkFPU.v:	FPU_MODULE.bsv FPU.bsv
+	bsc +RTS -Ksize -RTS -verilog -u -g mkFPU FPU_MODULE.bsv	
 mkCPU.v:	CPU.bo
 	bsc -verilog -g mkCPU CPU.bsv
 CPU.bo:	CPU.bsv

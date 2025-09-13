@@ -9,7 +9,6 @@ package ALU;
 import Instructions :: *;
 import Vector :: *;
 
-
 //function Integer factorial( Bit#(n) x) provisos( Bits#(Integer,n));
 //  if( x <= 1 ) return 1;
 //  else return( unpack(x) * fromInteger(factorial(x-1)) );
@@ -188,6 +187,7 @@ function Word fnALU( ALUInstruction instr,
           end);
   MORTON_MERGE: ret_val = mortonMerge( v1, v2 );
   REVERSE_BITS: ret_val = reverseBits(v1);
+  FPU: ret_val = 0; // but we should never come here
   endcase
   return ret_val;
 endfunction

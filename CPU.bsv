@@ -8,17 +8,17 @@ package CPU;
 import Arch :: *;
 import Instructions :: *;   
 import CPU_IFC :: *;
+import Instructions:: *;
 import ALU:: *;
 import ALU_MODULE:: *;
-import Instructions:: *;
+import FPU:: *;
+import FPU_MODULE:: *;
 import Decode:: *;
 import FIFOF:: *;
 import Semi_FIFOF:: *;
 import Assert:: *;
 import RegFile :: *;
-import BRAM :: *;
-import StmtFSM :: *;   
-   
+
 typedef enum { CPU_STATE_RUNNING,
 	       CPU_STATE_HALT_REQUESTED,
 	       CPU_STATE_HALTED,
@@ -38,14 +38,33 @@ typedef enum { A_FETCH,
 
 typedef 4 REG_ADDR;   
 Integer reg_addr = valueOf( REG_ADDR );
-   
-   
+typedef Bit#(REG_ADDR) RegIndex;
+// Convinience functions as we introduce VLIW semantics
+typedef Tuple3#(RegIndex,RegIndex,RegIndex) RegInstr;
+typedef Bit#(DATA_WIDTH) Instruction;
+function RegInstr decodeRegs( Instruction instr );
+  RegInstr ret_val = tuple3(instr[17:14],instr[9:6],instr[13:10]);
+  return ret_val;
+endfunction
+function ALUInstruction decodeALUInstruction( Instruction instr);
+  ALUInstruction ret_val = Instructions::NOP;
+  ret_val = unpack( instr[5:0] );
+  return ret_val;
+endfunction
+function FPUInstruction decodeFPUInstruction( Instruction instr);
+  FPUInstruction ret_val = Instructions::FNOP;
+  ret_val = unpack( truncate( instr[23:18] ) );
+  return ret_val;
+endfunction
+  
 (* synthesize *)
 module mkCPU(CPU_IFC);
    Reg#(CPUState) reg_state <- mkReg(CPU_STATE_HALTED);
    Reg#(CPUAction) action_state <- mkReg( A_FETCH );
    RegFile#(Bit#(REG_ADDR),Word) registers <- mkRegFileFull;
-   Reg#(ALUInstruction) alu_instruction <- mkReg(?);
+   RegFile#(Bit#(REG_ADDR),Word) fregisters <- mkRegFileFull;   
+   Reg#(ALUInstruction) alu_instruction <- mkReg(Instructions::NOP);
+   Reg#(FPUInstruction) fpu_instruction <- mkReg(Instructions::FNOP);
    Reg#(Word) immediate <- mkReg(?);
    Reg#(Bit#(REG_ADDR)) src1 <- mkReg(?);
    Reg#(Bit#(REG_ADDR)) src2 <- mkReg(?);
@@ -55,22 +74,18 @@ module mkCPU(CPU_IFC);
    FIFOF #(Mem_Req) f_IMem_req  <- mkFIFOF;
    FIFOF #(Mem_Rsp) f_IMem_rsp  <- mkFIFOF;
    ALUIfc#(DATA_WIDTH) alu1 <- mkALU;
-
-   //function ALUIfc#(DATA_WIDTH) toALUIFC(ALUIfc#(DATA_WIDTH) x);
-   //return interface ALUIfc#(DATA_WIDTH);
-   //       method Word compute(a,b,c,d) = x.compute(a,b,c,d);
-   //endinterface;
-   //endfunction
-   
+   FPUIfc fpu1 <- mkFPU;
    Action decode =
    action
         let mem_rsp <- pop_o (to_FIFOF_O (f_IMem_rsp));
         let y = fn_Decode( fetch_to_decode, mem_rsp );
-
-	alu_instruction <= unpack(y.instr[5:0]);
-        src1 <= unpack(y.instr[9:6]);
-        src2 <= unpack(y.instr[13:10]);
-        dest1 <= unpack(y.instr[17:14]);
+        let cpu_instruction = decodeALUInstruction( y.instr );
+        if( cpu_instruction == FPU ) fpu_instruction <= decodeFPUInstruction( y.instr );
+	alu_instruction <= ( cpu_instruction == FPU ) ? NOP : cpu_instruction;
+        let regs_used = decodeRegs( y.instr );
+        dest1 <= tpl_1( regs_used );
+        src1 <= tpl_2( regs_used );
+        src2 <= tpl_2( regs_used );
         immediate <= extend(unpack(y.instr[63:18]));
    endaction;
      
@@ -86,6 +101,14 @@ module mkCPU(CPU_IFC);
    $display("[%d] %d = [%d] %d [%d] %d instr: ",dest1,dval,src1,v1,src2,v2,fshow(alu_instruction));
    endaction;
 
+   Action execute_fpu =
+   action
+   let v1 = ( src1 ==0 ) ? 0 : fregisters.sub(src1);
+   let v2 = ( src2 ==0 ) ? 0 : fregisters.sub(src2);
+   let fval = fpu1.compute( fpu_instruction, v1, v2 ); // no support for FP immediates
+   fregisters.upd( dest1, fval );
+   endaction;
+
    rule memory_clearing_house (f_IMem_req.notEmpty );
    f_IMem_req.deq;
    f_IMem_rsp.enq( Mem_Rsp{ rsp_type: MEM_RSP_OK, data: 0} );
@@ -97,7 +120,7 @@ module mkCPU(CPU_IFC);
    fetch_to_decode <= y.to_D;
    f_IMem_req.enq (y.mem_req);
    action_state <= A_DECODE;
-   pc <= pc + 4;
+   pc <= pc + 8; // this should be DATA_WIDTH/8
    $display("Fetch instruction: %d.\n",pc);
    endrule
 
@@ -110,6 +133,7 @@ module mkCPU(CPU_IFC);
    rule execute_rule (action_state == A_EXECUTE);
    $display("Executing...\n");
    execute;
+   if( fpu_instruction != Instructions::FNOP ) execute_fpu;
    action_state <= A_RETIRE_DMEM;
    endrule
 
@@ -133,7 +157,8 @@ module mkCPU(CPU_IFC);
    method ActionValue#(Bit#(DATA_WIDTH)) selftest( Bit#(DATA_WIDTH) instr);
    $display("Self testing processor.......\nDone.\n");
    f_IMem_rsp.enq( Mem_Rsp{ rsp_type: MEM_RSP_OK, data: instr} );
-   return registers.sub(2);
+   let regs_used = decodeRegs( instr ); // format is dest = reg1 op reg2
+   return registers.sub(tpl_1( regs_used ) ); 
    endmethod
 
    interface fo_IMem_req = to_FIFOF_O (f_IMem_req);

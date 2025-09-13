@@ -21,7 +21,11 @@ typedef enum { NOP, ADD, SUB,
                POPCNT, POPCNTIMM, ROTATEL, ROTATELIMM,
                ROTATER, ROTATERIMM, SIGNEXTEND, SH1ADD, SH2ADD, SH3ADD,
                SPACESHIP, ABS, ABSIMM, ADD3, FMA,
-               FACTORIAL, HYPOT, MORTON_MERGE, REVERSE_BITS
-               } ALUInstruction deriving(Bits, Eq,FShow);
+               FACTORIAL, HYPOT, MORTON_MERGE, REVERSE_BITS, FPU, INSTR_63, INSTR_64
+               } ALUInstruction deriving(Bits, Eq,FShow, Bounded);
+typedef enum { FNOP, FADD, FSUB, FMUL, FDIV, FSQRT, FRSQRT, FRECIPROCAL,
+	       FNORM,FSIN, FCOS, FTAN, FEXP, FLOG, FASIN, FACOS,
+	       FATAN, FRNG, FSINH, FCOSH, FTANH, FRELU, FABS, FLOGB, FPOW
+	       } FPUInstruction deriving(Bits, Eq,FShow, Bounded);
 endpackage
 
