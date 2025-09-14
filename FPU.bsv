@@ -65,12 +65,13 @@ function FP64 fnFPU( FPUInstruction instr, FP64 v1, FP64 v2);
                   end);
   //FEXP: ret_val = ( fv1.sign == False ) ? taylorExp( fv1 ) : taylorExpN( fv1 );
   //FEXP: ret_val = taylorExp( fv1 );
+  FRECIPROCAL: ret_val = one(False)/fv1;
   /*
   FSQRT:ret_val = (begin
                    let v = sqrtFP( fv1, Rnd_Zero );
                    tpl_1(v);
                    end);
-
+  
   FRSQRT: ret_val = (begin
                     let v = sqrtFP( fv1, Rnd_Zero );
                     one(False)/tpl_1(v);
@@ -81,11 +82,11 @@ function FP64 fnFPU( FPUInstruction instr, FP64 v1, FP64 v2);
                     let v = sqrtFP(u, Rnd_Zero);
                     tpl_1(v);
                     end);
-  FRECIPROCAL: ret_val = one(False)/fv1;
-  FRNG: ret_val = 0;
-  //FPOW: ret_val = pow( fv1, 3 );
   */
-  default: ret_val = 0;
+  FRNG: ret_val = zero(False);
+  //FPOW: ret_val = pow( fv1, 3 );
+  
+  default: ret_val = zero(False);
   endcase
   return convertD2B(ret_val);
 endfunction

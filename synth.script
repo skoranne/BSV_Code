@@ -1,6 +1,7 @@
 read_verilog /scratch1/skoranne/OPENLANE/GCD/designs/CPU/FIFO2.v
 read_verilog /scratch1/skoranne/OPENLANE/GCD/designs/CPU/RegFile.v
-read_verilog mkALU.v
+# read_verilog mkALU.v
+# read_verilog mkFPU.v
 read_verilog mkCPU.v
 check
 hierarchy -top mkCPU
@@ -9,4 +10,4 @@ proc
 check
 opt
 stat
-
+techmap

@@ -15,12 +15,17 @@ module mkTop(Empty);
 
        rule start1 (i==1);
        let instr = {58'b0_0010_0001_0001,pack(Instructions::SLL)};       
-       cpu.selftest(instr);       
+       let v = cpu.selftest(instr);       
        endrule
 
        rule start2 (i==2);
        let instr = {58'b0_0011_0010_0001,pack(Instructions::ADD)};       
-       cpu.selftest(instr);       
+       let v = cpu.selftest(instr);       
+       endrule
+
+       rule start3 (i==3);
+       let instr = {58'b0_0011_0010_0001,pack(Instructions::FPU)};       
+       let v = cpu.selftest(instr);       
        endrule
 
        rule check (i==0);

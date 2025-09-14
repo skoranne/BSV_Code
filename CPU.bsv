@@ -80,8 +80,13 @@ module mkCPU(CPU_IFC);
         let mem_rsp <- pop_o (to_FIFOF_O (f_IMem_rsp));
         let y = fn_Decode( fetch_to_decode, mem_rsp );
         let cpu_instruction = decodeALUInstruction( y.instr );
-        if( cpu_instruction == FPU ) fpu_instruction <= decodeFPUInstruction( y.instr );
-	alu_instruction <= ( cpu_instruction == FPU ) ? NOP : cpu_instruction;
+        if( cpu_instruction == FPU ) begin
+           fpu_instruction <= decodeFPUInstruction( y.instr );
+           alu_instruction <= NOP;
+        end
+        else begin
+           alu_instruction <= cpu_instruction;
+        end
         let regs_used = decodeRegs( y.instr );
         dest1 <= tpl_1( regs_used );
         src1 <= tpl_2( regs_used );
@@ -107,6 +112,7 @@ module mkCPU(CPU_IFC);
    let v2 = ( src2 ==0 ) ? 0 : fregisters.sub(src2);
    let fval = fpu1.compute( fpu_instruction, v1, v2 ); // no support for FP immediates
    fregisters.upd( dest1, fval );
+   $display("[%d] %d = [%d] %d [%d] %d instr: ",dest1,fval,src1,v1,src2,v2,fshow(fpu_instruction));
    endaction;
 
    rule memory_clearing_house (f_IMem_req.notEmpty );
@@ -146,19 +152,25 @@ module mkCPU(CPU_IFC);
     for( Bit#(REG_ADDR) i=1; i < 4; i=i+1) begin
       $display("Reg[%d] = %d", i, registers.sub(i));
     end
+    for( Bit#(REG_ADDR) i=1; i < 4; i=i+1) begin
+      $display("Reg[%d] = %d", i, fregisters.sub(i));
+    end
    endrule
 
    method Action boot if(reg_state == CPU_STATE_HALTED);
      $display("Booting processor.......\nDone.\n");
      reg_state <= CPU_STATE_RUNNING;
-     registers.upd(1,2);
+     //registers.upd(1,2);
    endmethod
 
    method ActionValue#(Bit#(DATA_WIDTH)) selftest( Bit#(DATA_WIDTH) instr);
    $display("Self testing processor.......\nDone.\n");
    f_IMem_rsp.enq( Mem_Rsp{ rsp_type: MEM_RSP_OK, data: instr} );
    let regs_used = decodeRegs( instr ); // format is dest = reg1 op reg2
-   return registers.sub(tpl_1( regs_used ) ); 
+   // This is very CRUCIAL, without this logic the floating point registers
+   // were theoretically never used, so logic synthesis was able to remove all
+   // use of them, and therefore removed the FPU as well.
+   return ( fregisters.sub(tpl_1( regs_used)) | registers.sub(tpl_1( regs_used ) ) ); 
    endmethod
 
    interface fo_IMem_req = to_FIFOF_O (f_IMem_req);
